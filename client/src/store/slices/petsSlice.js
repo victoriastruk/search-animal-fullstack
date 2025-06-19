@@ -4,7 +4,7 @@ const PET_SLICE_NAME = 'pets';
 
 const initialState = {
   pets: [],
-  petstype: [],
+  petTypes: [],
   isFetching: false,
   error: null,
 };

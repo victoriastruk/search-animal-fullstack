@@ -1,8 +1,9 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
+import { connect } from 'react-redux';
 
 const CITIES = ['Kyiv', 'Dnipro', 'New York'];
 
-function PetList() {
+function PetForm({ petTypes }) {
   const initialValues = {
     name: '',
     owner: '',
@@ -10,7 +11,7 @@ function PetList() {
     description: '',
     city: CITIES[0],
     lostDate: '',
-    petTypeId: '1',
+    petTypeId: petTypes[0]?.id ?? '',
   };
 
   const handleSubmit = (values, formikBag) => {
@@ -62,24 +63,25 @@ function PetList() {
             ))}
           </select>
           <br />
-          Add comment More actions
-          <label>Pet`s type:</label>
-          <select
-            name="petTypeId"
-            value={formikProps.values.petTypeId}
-            onChange={formikProps.handleChange}
-          >
-            {[
-              { id: '1', type: 'parrot' },
+          {petTypes.length !== 0 && (
+            <>
+              <label>Pet`s type:</label>
 
-              { id: '2', type: 'cat' },
-            ].map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.type}
-              </option>
-            ))}
-          </select>
-          <br />
+              <select
+                name="petTypeId"
+                value={formikProps.values.petTypeId}
+                onChange={formikProps.handleChange}
+              >
+                {petTypes.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.type}
+                  </option>
+                ))}
+              </select>
+
+              <br />
+            </>
+          )}
           <button type="submit">Add</button>
         </Form>
       )}
@@ -87,4 +89,5 @@ function PetList() {
   );
 }
 
-export default PetList;
+const mapStateToProps = ({ petsData: { petTypes } }) => ({ petTypes });
+export default connect(mapStateToProps)(PetForm);
