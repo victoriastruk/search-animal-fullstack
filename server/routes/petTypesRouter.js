@@ -6,4 +6,4 @@ const petTypesRouter = Router();
 
 petTypesRouter.get('/', petTypesController.getPetTypes);
 
-module.exports = petTypesController;
+module.exports = petTypesRouter;
