@@ -1,5 +1,12 @@
+import PetForm from '../../components/PetForm';
+
 function CreatePetPage() {
-  return <div>CreatePetPage</div>;
+  return (
+    <div>
+      <h1>Create Pet</h1>
+      <PetForm />
+    </div>
+  );
 }
 
 export default CreatePetPage;
