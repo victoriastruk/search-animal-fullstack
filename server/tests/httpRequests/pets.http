@@ -1,1 +1,21 @@
 GET http://127.0.0.1:5000/api/petTypes
+
+###
+POST http://127.0.0.1:5000/api/pets
+Content-Type: application/json
+
+
+
+{
+  "name":"Test",
+  "owner":"Test Testovych",
+  "ownerContacts":"+301213456789",
+  "description":"black, big",
+  "city":"Kyiv",
+  "lostDate":"2024-01-01",
+  "petTypeId": 1
+}
+
+###
+
+GET http://127.0.0.1:5000/api/pets

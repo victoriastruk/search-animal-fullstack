@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { validate } = require('./../middleware');
 const { petsController } = require('../controllers');
 
 // /api/pets
@@ -6,7 +7,7 @@ const petsRouter = Router();
 
 petsRouter
   .route('/')
-  .post(petsController.createPet)
+  .post(validate.validatePetOnCreate, petsController.createPet)
   .get(petsController.getPets);
 
 petsRouter

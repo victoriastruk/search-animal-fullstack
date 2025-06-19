@@ -1,4 +1,15 @@
-module.exports.createPet = async (req, res, next) => {};
+const { Pet } = require('./../models');
+
+module.exports.createPet = async (req, res, next) => {
+  const { body } = req;
+  try {
+    const createdPet = await Pet.create(body);
+
+    res.status(201).send({ data: createdPet });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports.getPets = async (req, res, next) => {
   res.status(200).send('Ok');
