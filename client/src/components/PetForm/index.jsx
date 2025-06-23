@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
+import { createPetThunk, getTypesThunk } from '../../store/slices/petsSlice';
 
 const CITIES = ['Kyiv', 'Dnipro', 'New York'];
 
-function PetForm({ petTypes }) {
+function PetForm({ petTypes, getTypes, createPet }) {
   const initialValues = {
     name: '',
     owner: '',
@@ -11,13 +13,18 @@ function PetForm({ petTypes }) {
     description: '',
     city: CITIES[0],
     lostDate: '',
-    petTypeId: petTypes[0]?.id ?? '',
+    petTypeId: '',
   };
 
   const handleSubmit = (values, formikBag) => {
-    console.log('values :>> ', values);
+    createPet(values);
     formikBag.resetForm();
   };
+
+  useEffect(() => {
+    getTypes();
+  }, []);
+
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {(formikProps) => (
@@ -66,7 +73,6 @@ function PetForm({ petTypes }) {
           {petTypes.length !== 0 && (
             <>
               <label>Pet`s type:</label>
-
               <select
                 name="petTypeId"
                 value={formikProps.values.petTypeId}
@@ -78,7 +84,6 @@ function PetForm({ petTypes }) {
                   </option>
                 ))}
               </select>
-
               <br />
             </>
           )}
@@ -90,4 +95,10 @@ function PetForm({ petTypes }) {
 }
 
 const mapStateToProps = ({ petsData: { petTypes } }) => ({ petTypes });
-export default connect(mapStateToProps)(PetForm);
+
+const mapDispatchToProps = (dispatch) => ({
+  getTypes: () => dispatch(getTypesThunk()),
+  createPet: (values) => dispatch(createPetThunk(values)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PetForm);
