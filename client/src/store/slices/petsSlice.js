@@ -52,7 +52,7 @@ export const getPetsThunk = createAsyncThunk(
     try {
       const {
         data: { data },
-      } = await API.getPets();
+      } = await API.getPets(payload);
       return data;
     } catch (err) {
       return rejectWithValue({ errors: err.response.data });
