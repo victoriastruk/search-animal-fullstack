@@ -1,5 +1,12 @@
+import PetsList from '../../components/PetsList';
+
 function PetsListPage() {
-  return <div>PetsListPage</div>;
+  return (
+    <>
+      <h1>Pets List</h1>
+      <PetsList />
+    </>
+  );
 }
 
 export default PetsListPage;

@@ -3,11 +3,19 @@ import * as API from './../../api';
 
 const PET_SLICE_NAME = 'pets';
 
+// GET /api/pets?petType=1
+// SELECT *
+// FROM pets
+// WHERE pet_type_id = 1
+
 const initialState = {
   pets: [],
   petTypes: [],
   isFetching: false,
   error: null,
+  filter: {
+    petType: '',
+  },
 };
 
 export const getTypesThunk = createAsyncThunk(
@@ -38,9 +46,28 @@ export const createPetThunk = createAsyncThunk(
   }
 );
 
+export const getPetsThunk = createAsyncThunk(
+  `${PET_SLICE_NAME}/get`,
+  async (payload, { rejectWithValue }) => {
+    try {
+      const {
+        data: { data },
+      } = await API.getPets();
+      return data;
+    } catch (err) {
+      return rejectWithValue({ errors: err.response.data });
+    }
+  }
+);
+
 const petsSlice = createSlice({
   name: PET_SLICE_NAME,
   initialState,
+  reducers: {
+    changePetTypeFilter: (state, { payload }) => {
+      state.filter.petType = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getTypesThunk.pending, (state) => {
       state.isFetching = true;
@@ -66,9 +93,23 @@ const petsSlice = createSlice({
       state.error = payload;
       state.isFetching = false;
     });
+    builder.addCase(getPetsThunk.pending, (state) => {
+      state.isFetching = true;
+      state.error = null;
+    });
+    builder.addCase(getPetsThunk.fulfilled, (state, { payload }) => {
+      state.pets = [...payload];
+      state.isFetching = false;
+    });
+    builder.addCase(getPetsThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.isFetching = false;
+    });
   },
 });
 
-const { reducer } = petsSlice;
+const { reducer, actions } = petsSlice;
+
+export const { changePetTypeFilter } = actions;
 
 export default reducer;

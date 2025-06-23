@@ -12,7 +12,16 @@ module.exports.createPet = async (req, res, next) => {
 };
 
 module.exports.getPets = async (req, res, next) => {
-  res.status(200).send('Ok');
+  try {
+    const foundPets = await Pet.findAll({
+      raw: true,
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+    });
+
+    res.status(200).send({ data: foundPets });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports.getPetById = async (req, res, next) => {};
